@@ -189,7 +189,7 @@ def main():
 			continue
 			
 		#For debugging purposes
-		#if not (countryid==7 and tankid==9):
+		#if not (countryid==1 and tankid==27):
 		#	continue
 		
 		for m in xrange(0,len(tupledata)):
@@ -279,9 +279,8 @@ def main():
 				
 						newbaseoffset += blocksizes[blocknumber] 
 					elif blockname == 'rankedSeasons':
-						fmt = '<' + 'IB' * (blocksizes[blocknumber]/6)
-						rankedSeasondata = struct.unpack_from(fmt, data, newbaseoffset)
-						index = 0
+						rdict = unpackdict('II', 'BB', blocksizes[blocknumber], data, newbaseoffset)
+						tank_v2['rankedSeasons'] = rdict
 						newbaseoffset += blocksizes[blocknumber]
 
 					else:
@@ -683,7 +682,38 @@ def keepCompatibility(structureddata):
 	return structureddata
 
 
+def unpackdict(keyFormat, valueFormat, blocksize, data, offset):
+	itemFormat = keyFormat + valueFormat
+	itemSize = struct.calcsize('<' + itemFormat)
+	length = blocksize / itemSize
+	if length == 0:
+		return {}
+	
+	keyLength = len(keyFormat)
+	valueLength = len(valueFormat)
+	result = dict()
 
+	if keyLength == 1 and valueLength == 1:
+		listToItem = lambda values, idx: (values[idx], values[idx + 1])
+	elif keyLength == 1 and valueLength != 1:
+		listToItem = lambda values, idx: (values[idx], values[idx + 1:idx + valueLength + 1])
+	elif keyLength != 1 and valueLength == 1:
+		listToItem = lambda values, idx: (values[idx:idx + keyLength], values[idx + keyLength])
+	else:
+		listToItem = lambda values, idx: (values[idx:idx + keyLength], values[idx + keyLength:idx + valueLength + keyLength])
+
+	fmt = '<' + itemFormat * length
+	values = struct.unpack_from(fmt, data, offset)
+	return values
+	#itemLength = len(itemFormat)
+	#idx = 0
+	#for i in xrange(length):
+	#	key, value = listToItem(values, idx)
+	#	#key, value = (values[idx], values[idx + valueLength])
+	#	idx += itemLength
+	#	result[key] = value
+
+	#return result
 
 def get_json_data(filename):
 	import json, time, sys, os
