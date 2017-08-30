@@ -1,6 +1,7 @@
 _Archive/
 dossiers/
 testing/
+.vs/
 *.zip
 *.cmd
 

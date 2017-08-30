@@ -3,7 +3,7 @@
 # Initial version by Phalynx www.vbaddict.net     #
 ###################################################
 import struct, json, time, sys, os
-	
+
 def usage():
 	print str(sys.argv[0]) + " dossierfilename.dat [options]"
 	print 'Options:'
@@ -17,7 +17,7 @@ def main():
 	
 	import struct, json, time, sys, os, shutil, datetime, base64
 
-	parserversion = "0.9.19.1"
+	parserversion = "0.9.20.0"
 	
 	global rawdata, tupledata, data, structures, numoffrags
 	global filename_source, filename_target
@@ -138,6 +138,10 @@ def main():
 	battleCount_rated7x7 = 0
 	battleCount_globalMap = 0
 	battleCount_fallout = 0
+	battleCount_ranked = 0
+	battleCount_rankedCurrent = 0
+	battleCount_30 = 0
+	
 	
 	for tankitem in tankitems:
 		
@@ -186,7 +190,7 @@ def main():
 			continue
 			
 		#For debugging purposes
-		#if not (countryid==4 and tankid==19):
+		#if not (countryid==3 and tankid==252):
 		#	continue
 		
 		for m in xrange(0,len(tupledata)):
@@ -227,10 +231,13 @@ def main():
 				
 			if tankversion in [94, 95, 96]:
 				blocks = ('a15x15', 'a15x15_2', 'clan', 'clan2', 'company', 'company2', 'a7x7', 'achievements', 'frags', 'total', 'max15x15', 'max7x7', 'playerInscriptions', 'playerEmblems', 'camouflages', 'compensation', 'achievements7x7', 'historical', 'maxHistorical', 'historicalAchievements', 'fortBattles', 'maxFortBattles', 'fortSorties', 'maxFortSorties', 'fortAchievements', 'singleAchievements', 'clanAchievements', 'rated7x7', 'maxRated7x7', 'globalMapCommon', 'maxGlobalMapCommon', 'fallout', 'maxFallout', 'falloutAchievements')
-                
-			if tankversion in [97,98]:
-				blocks = ('a15x15', 'a15x15_2', 'clan', 'clan2', 'company', 'company2', 'a7x7', 'achievements', 'frags', 'total', 'max15x15', 'max7x7', 'playerInscriptions', 'playerEmblems', 'camouflages', 'compensation', 'achievements7x7', 'historical', 'maxHistorical', 'historicalAchievements', 'fortBattles', 'maxFortBattles', 'fortSorties', 'maxFortSorties', 'fortAchievements', 'singleAchievements', 'clanAchievements', 'rated7x7', 'maxRated7x7', 'globalMapCommon', 'maxGlobalMapCommon', 'fallout', 'maxFallout', 'falloutAchievements', 'ranked', 'maxRanked')
-                
+
+			if tankversion in [97, 98]:
+				blocks = ('a15x15', 'a15x15_2', 'clan', 'clan2', 'company', 'company2', 'a7x7', 'achievements', 'frags', 'total', 'max15x15', 'max7x7', 'playerInscriptions', 'playerEmblems', 'camouflages', 'compensation', 'achievements7x7', 'historical', 'maxHistorical', 'historicalAchievements', 'fortBattles', 'maxFortBattles', 'fortSorties', 'maxFortSorties', 'fortAchievements', 'singleAchievements', 'clanAchievements', 'rated7x7', 'maxRated7x7', 'globalMapCommon', 'maxGlobalMapCommon', 'fallout', 'maxFallout', 'falloutAchievements', 'ranked', 'maxRanked', 'rankedCurrent')
+			
+			if tankversion == 99:
+				blocks = ('a15x15', 'a15x15_2', 'clan', 'clan2', 'company', 'company2', 'a7x7', 'achievements', 'frags', 'total', 'max15x15', 'max7x7', 'playerInscriptions', 'playerEmblems', 'camouflages', 'compensation', 'achievements7x7', 'historical', 'maxHistorical', 'historicalAchievements', 'fortBattles', 'maxFortBattles', 'fortSorties', 'maxFortSorties', 'fortAchievements', 'singleAchievements', 'clanAchievements', 'rated7x7', 'maxRated7x7', 'globalMapCommon', 'maxGlobalMapCommon', 'fallout', 'maxFallout', 'falloutAchievements', 'ranked', 'maxRanked', 'rankedCurrent', 'a30x30', 'max30x30')
+
 			blockcount = len(list(blocks))+1
 
 			newbaseoffset = (blockcount * 2)
@@ -240,6 +247,9 @@ def main():
 			numoffrags_list = 0
 			numoffrags_a15x15 = 0
 			numoffrags_a7x7 = 0
+			numoffrags_a30x30 = 0
+			numoffrags_ranked = 0
+			numoffrags_rankedCurrent = 0			
 			numoffrags_historical = 0
 			numoffrags_fortBattles = 0
 			numoffrags_fortSorties = 0
@@ -302,7 +312,7 @@ def main():
 				
 				if 'battlesCount' in tank_v2['a15x15']:
 					battleCount_15 += tank_v2['a15x15']['battlesCount']
-					
+
 				if 'frags' in tank_v2['a15x15']:
 					numoffrags_a15x15 = int(tank_v2['a15x15']['frags'])
 
@@ -361,11 +371,35 @@ def main():
 				
 				if 'frags' in tank_v2['fallout']:
 					numoffrags_fallout = int(tank_v2['fallout']['frags'])
+					
+			if contains_block('ranked', tank_v2):
+				
+				if 'battlesCount' in tank_v2['ranked']:
+					battleCount_ranked += tank_v2['ranked']['battlesCount']
+				
+				if 'frags' in tank_v2['ranked']:
+					numoffrags_ranked = int(tank_v2['ranked']['frags'])
+
+			if contains_block('rankedCurrent', tank_v2):
+				
+				if 'battlesCount' in tank_v2['rankedCurrent']:
+					battleCount_rankedCurrent += tank_v2['rankedCurrent']['battlesCount']
+				
+				if 'frags' in tank_v2['rankedCurrent']:
+					numoffrags_rankedCurrent = int(tank_v2['rankedCurrent']['frags'])
+
+			if contains_block('a30x30', tank_v2):
+				
+				if 'battlesCount' in tank_v2['a30x30']:
+					battleCount_30 += tank_v2['a30x30']['battlesCount']
+				
+				if 'frags' in tank_v2['a30x30']:
+					numoffrags_a30x30 = int(tank_v2['a30x30']['frags'])					
 				
 			if option_frags == 1:
 
 				try:
-					if numoffrags_list <> (numoffrags_a15x15 + numoffrags_a7x7 + numoffrags_historical + numoffrags_fortBattles + numoffrags_fortSorties + numoffrags_rated7x7 + numoffrags_globalMap + numoffrags_fallout):
+					if numoffrags_list <> (numoffrags_a15x15 + numoffrags_a7x7 + numoffrags_historical + numoffrags_fortBattles + numoffrags_fortSorties + numoffrags_rated7x7 + numoffrags_globalMap + numoffrags_fallout + numoffrags_ranked +  numoffrags_rankedCurrent + numoffrags_a30x30):
 						pass
 						#write_to_log('Wrong number of frags for ' + str(tanktitle) + ', ' + str(tankversion) + ': ' + str(numoffrags_list) + ' = ' + str(numoffrags_a15x15) + ' + ' + str(numoffrags_a7x7) + ' + ' + str(numoffrags_historical) + ' + ' + str(numoffrags_fortBattles) + ' + ' + str(numoffrags_fortSorties) + ' + ' + str(numoffrags_rated7x7))
 				except Exception, e:
@@ -392,6 +426,9 @@ def main():
 				"frags_historical":  numoffrags_historical,
 				"frags_fortBattles":  numoffrags_fortBattles,
 				"frags_fortSorties":  numoffrags_fortSorties,
+				"frags_ranked":  numoffrags_ranked,
+				"frags_rankedCurrent":  numoffrags_rankedCurrent,
+				"frags_a30x30":  numoffrags_a30x30,				
 				"frags_compare": numoffrags_list,
 				"has_15x15": contains_block("a15x15", tank_v2),
 				"has_7x7": contains_block("a7x7", tank_v2),
@@ -399,7 +436,10 @@ def main():
 				"has_clan": contains_block("clan", tank_v2),
 				"has_company": contains_block("company", tank_v2),
 				"has_fort": contains_block("fortBattles", tank_v2),
-				"has_sortie": contains_block("fortSorties", tank_v2)
+				"has_sortie": contains_block("fortSorties", tank_v2),
+				"has_ranked": contains_block("ranked", tank_v2),
+				"has_rankedCurrent": contains_block("rankedCurrent", tank_v2),
+				"has_a30x30": contains_block("a30x30", tank_v2)				
 				
 			}
 			
@@ -501,6 +541,10 @@ def main():
 	dossierheader['battleCount_historical'] = battleCount_historical
 	dossierheader['battleCount_company'] = battleCount_company
 	dossierheader['battleCount_clan'] = battleCount_clan
+	
+	dossierheader['battleCount_30'] = battleCount_30
+	dossierheader['battleCount_ranked'] = battleCount_ranked
+	dossierheader['battleCount_rankedCurrent'] = battleCount_rankedCurrent	
 
 	dossierheader['result'] = "ok"
 	dossierheader['message'] = "ok"
@@ -737,19 +781,19 @@ def getdata(name, startoffset, offsetlength):
 		structformat = 'I'
 
 	value = struct.unpack_from('<' + structformat, data, startoffset)[0]
- 	
- 	for x in range(0, offsetlength):
- 		rawdata[startoffset+x] = str(tupledata[startoffset+x]) + " / " + str(value) +  "; " + name
 
-	
- 	return value
+	for x in range(0, offsetlength):
+		rawdata[startoffset+x] = str(tupledata[startoffset+x]) + " / " + str(value) +  "; " + name
+
+
+	return value
 
 
 def load_structures():
 	
 	structures = dict()
 	
-	load_versions = [10,17,18,20,22,24,26,27,28,29,65,69,77,81,85,87,88,89,92,94,95,96,97,98];
+	load_versions = [10,17,18,20,22,24,26,27,28,29,65,69,77,81,85,87,88,89,92,94,95,96,97,98,99];
 	for version in load_versions:
 		jsondata = get_json_data('structures/structures_'+str(version)+'.json')
 		structures[version] = dict()
