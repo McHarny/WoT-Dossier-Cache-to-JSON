@@ -139,7 +139,6 @@ def main():
 	battleCount_globalMap = 0
 	battleCount_fallout = 0
 	battleCount_ranked = 0
-	battleCount_rankedCurrent = 0
 	battleCount_30 = 0
 	
 	
@@ -190,7 +189,7 @@ def main():
 			continue
 			
 		#For debugging purposes
-		#if not (countryid==3 and tankid==252):
+		#if not (countryid==7 and tankid==9):
 		#	continue
 		
 		for m in xrange(0,len(tupledata)):
@@ -233,10 +232,10 @@ def main():
 				blocks = ('a15x15', 'a15x15_2', 'clan', 'clan2', 'company', 'company2', 'a7x7', 'achievements', 'frags', 'total', 'max15x15', 'max7x7', 'playerInscriptions', 'playerEmblems', 'camouflages', 'compensation', 'achievements7x7', 'historical', 'maxHistorical', 'historicalAchievements', 'fortBattles', 'maxFortBattles', 'fortSorties', 'maxFortSorties', 'fortAchievements', 'singleAchievements', 'clanAchievements', 'rated7x7', 'maxRated7x7', 'globalMapCommon', 'maxGlobalMapCommon', 'fallout', 'maxFallout', 'falloutAchievements')
 
 			if tankversion in [97, 98]:
-				blocks = ('a15x15', 'a15x15_2', 'clan', 'clan2', 'company', 'company2', 'a7x7', 'achievements', 'frags', 'total', 'max15x15', 'max7x7', 'playerInscriptions', 'playerEmblems', 'camouflages', 'compensation', 'achievements7x7', 'historical', 'maxHistorical', 'historicalAchievements', 'fortBattles', 'maxFortBattles', 'fortSorties', 'maxFortSorties', 'fortAchievements', 'singleAchievements', 'clanAchievements', 'rated7x7', 'maxRated7x7', 'globalMapCommon', 'maxGlobalMapCommon', 'fallout', 'maxFallout', 'falloutAchievements', 'ranked', 'maxRanked', 'rankedCurrent')
+				blocks = ('a15x15', 'a15x15_2', 'clan', 'clan2', 'company', 'company2', 'a7x7', 'achievements', 'frags', 'total', 'max15x15', 'max7x7', 'playerInscriptions', 'playerEmblems', 'camouflages', 'compensation', 'achievements7x7', 'historical', 'maxHistorical', 'historicalAchievements', 'fortBattles', 'maxFortBattles', 'fortSorties', 'maxFortSorties', 'fortAchievements', 'singleAchievements', 'clanAchievements', 'rated7x7', 'maxRated7x7', 'globalMapCommon', 'maxGlobalMapCommon', 'fallout', 'maxFallout', 'falloutAchievements', 'ranked', 'maxRanked', 'rankedSeasons')
 			
 			if tankversion == 99:
-				blocks = ('a15x15', 'a15x15_2', 'clan', 'clan2', 'company', 'company2', 'a7x7', 'achievements', 'frags', 'total', 'max15x15', 'max7x7', 'playerInscriptions', 'playerEmblems', 'camouflages', 'compensation', 'achievements7x7', 'historical', 'maxHistorical', 'historicalAchievements', 'fortBattles', 'maxFortBattles', 'fortSorties', 'maxFortSorties', 'fortAchievements', 'singleAchievements', 'clanAchievements', 'rated7x7', 'maxRated7x7', 'globalMapCommon', 'maxGlobalMapCommon', 'fallout', 'maxFallout', 'falloutAchievements', 'ranked', 'maxRanked', 'rankedCurrent', 'a30x30', 'max30x30')
+				blocks = ('a15x15', 'a15x15_2', 'clan', 'clan2', 'company', 'company2', 'a7x7', 'achievements', 'frags', 'total', 'max15x15', 'max7x7', 'playerInscriptions', 'playerEmblems', 'camouflages', 'compensation', 'achievements7x7', 'historical', 'maxHistorical', 'historicalAchievements', 'fortBattles', 'maxFortBattles', 'fortSorties', 'maxFortSorties', 'fortAchievements', 'singleAchievements', 'clanAchievements', 'rated7x7', 'maxRated7x7', 'globalMapCommon', 'maxGlobalMapCommon', 'fallout', 'maxFallout', 'falloutAchievements', 'ranked', 'maxRanked', 'rankedSeasons', 'a30x30', 'max30x30')
 
 			blockcount = len(list(blocks))+1
 
@@ -249,7 +248,6 @@ def main():
 			numoffrags_a7x7 = 0
 			numoffrags_a30x30 = 0
 			numoffrags_ranked = 0
-			numoffrags_rankedCurrent = 0			
 			numoffrags_historical = 0
 			numoffrags_fortBattles = 0
 			numoffrags_fortSorties = 0
@@ -280,8 +278,12 @@ def main():
 							tank_v2['fragslist'] = fragslist
 				
 						newbaseoffset += blocksizes[blocknumber] 
+					elif blockname == 'rankedSeasons':
+						fmt = '<' + 'IB' * (blocksizes[blocknumber]/6)
+						rankedSeasondata = struct.unpack_from(fmt, data, newbaseoffset)
+						index = 0
+						newbaseoffset += blocksizes[blocknumber]
 
-						
 					else:
 						oldbaseoffset = newbaseoffset
 						structureddata = getstructureddata(blockname, tankversion, newbaseoffset)
@@ -380,14 +382,6 @@ def main():
 				if 'frags' in tank_v2['ranked']:
 					numoffrags_ranked = int(tank_v2['ranked']['frags'])
 
-			if contains_block('rankedCurrent', tank_v2):
-				
-				if 'battlesCount' in tank_v2['rankedCurrent']:
-					battleCount_rankedCurrent += tank_v2['rankedCurrent']['battlesCount']
-				
-				if 'frags' in tank_v2['rankedCurrent']:
-					numoffrags_rankedCurrent = int(tank_v2['rankedCurrent']['frags'])
-
 			if contains_block('a30x30', tank_v2):
 				
 				if 'battlesCount' in tank_v2['a30x30']:
@@ -399,7 +393,7 @@ def main():
 			if option_frags == 1:
 
 				try:
-					if numoffrags_list <> (numoffrags_a15x15 + numoffrags_a7x7 + numoffrags_historical + numoffrags_fortBattles + numoffrags_fortSorties + numoffrags_rated7x7 + numoffrags_globalMap + numoffrags_fallout + numoffrags_ranked +  numoffrags_rankedCurrent + numoffrags_a30x30):
+					if numoffrags_list <> (numoffrags_a15x15 + numoffrags_a7x7 + numoffrags_historical + numoffrags_fortBattles + numoffrags_fortSorties + numoffrags_rated7x7 + numoffrags_globalMap + numoffrags_fallout + numoffrags_ranked + numoffrags_a30x30):
 						pass
 						#write_to_log('Wrong number of frags for ' + str(tanktitle) + ', ' + str(tankversion) + ': ' + str(numoffrags_list) + ' = ' + str(numoffrags_a15x15) + ' + ' + str(numoffrags_a7x7) + ' + ' + str(numoffrags_historical) + ' + ' + str(numoffrags_fortBattles) + ' + ' + str(numoffrags_fortSorties) + ' + ' + str(numoffrags_rated7x7))
 				except Exception, e:
@@ -427,7 +421,6 @@ def main():
 				"frags_fortBattles":  numoffrags_fortBattles,
 				"frags_fortSorties":  numoffrags_fortSorties,
 				"frags_ranked":  numoffrags_ranked,
-				"frags_rankedCurrent":  numoffrags_rankedCurrent,
 				"frags_a30x30":  numoffrags_a30x30,				
 				"frags_compare": numoffrags_list,
 				"has_15x15": contains_block("a15x15", tank_v2),
@@ -438,7 +431,6 @@ def main():
 				"has_fort": contains_block("fortBattles", tank_v2),
 				"has_sortie": contains_block("fortSorties", tank_v2),
 				"has_ranked": contains_block("ranked", tank_v2),
-				"has_rankedCurrent": contains_block("rankedCurrent", tank_v2),
 				"has_a30x30": contains_block("a30x30", tank_v2)				
 				
 			}
@@ -544,7 +536,6 @@ def main():
 	
 	dossierheader['battleCount_30'] = battleCount_30
 	dossierheader['battleCount_ranked'] = battleCount_ranked
-	dossierheader['battleCount_rankedCurrent'] = battleCount_rankedCurrent	
 
 	dossierheader['result'] = "ok"
 	dossierheader['message'] = "ok"

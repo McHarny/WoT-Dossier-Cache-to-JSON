@@ -11,9 +11,9 @@
     <OutputPath>.</OutputPath>
     <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <InterpreterId>Global|PythonCore|2.7</InterpreterId>
+    <InterpreterId>Global|PythonCore|2.7-32</InterpreterId>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <CommandLineArguments>c:\4\NRXWO2LOGIXHANROO5XXE3DEN5THIYLONNZS43TFOQ5DEMBQGE2DWTLDJBQXE3TZHNIGYYLZMVZECY3DN52W45A=.dat -f</CommandLineArguments>
+    <CommandLineArguments>c:\Users\Micha\AppData\Roaming\Wargaming.net\WorldOfTanks\dossier_cache\NRXWO2LOGIXHANROO5XXE3DEN5THIYLONNZS43TFOQ5DEMBQGE2DWTLDJBQXE3TZHNIGYYLZMVZECY3DN52W45A=.dat -f</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
@@ -32,9 +32,6 @@
     <Folder Include="compiler" />
     <Folder Include="src" />
     <Folder Include="src\structures\" />
-  </ItemGroup>
-  <ItemGroup>
-    <InterpreterReference Include="Global|PythonCore|2.7" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="src\structures\structures_10.json" />
@@ -61,6 +58,10 @@
     <Content Include="src\structures\structures_96.json" />
     <Content Include="src\structures\structures_97.json" />
     <Content Include="src\structures\structures_98.json" />
+    <Content Include="src\structures\structures_99.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|2.7-32" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>

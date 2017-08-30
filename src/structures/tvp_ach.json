@@ -1,0 +1,74 @@
+{
+  "status": "ok",
+  "meta": { "count": 1 },
+  "data": {
+    "13456257": [
+      {
+        "achievements": {
+          "medalCarius": 3,
+          "aimer": 2,
+          "invader": 1,
+          "armorPiercer": 20,
+          "medalEkins": 3,
+          "medalKay": 3,
+          "duelist": 8,
+          "titleSniper": 45,
+          "medalLeClerc": 4,
+          "demolition": 5,
+          "supporter": 2,
+          "winnerLaurels": 4,
+          "medalAbrams": 4,
+          "medalPoppel": 3,
+          "medalPascucci": 1,
+          "effectiveSupport": 1,
+          "mainGun": 5,
+          "handOfDeath": 3,
+          "even": 1,
+          "aloneInTheField": 7,
+          "champion": 1,
+          "warrior": 2,
+          "predator": 10,
+          "markOfMastery": 3,
+          "unreachable": 2,
+          "arsonist": 3,
+          "charmed": 3,
+          "fighter": 6,
+          "medalLavrinenko": 4,
+          "sturdy": 1,
+          "fallenFlags": 1,
+          "bonecrusher": 31,
+          "shootToKill": 88,
+          "medalKnispel": 3
+        },
+        "series": {
+          "armorPiercer": 4,
+          "aimer": 2,
+          "titleSniper": 5,
+          "tacticalBreakthrough": 0,
+          "invincible": 0,
+          "victoryMarch": 0,
+          "deathTrack": 0,
+          "EFC2016": 0,
+          "diehard": 0,
+          "WFC2014": 0,
+          "handOfDeath": 1
+        },
+        "max_series": {
+          "armorPiercer": 20,
+          "aimer": 2,
+          "titleSniper": 45,
+          "tacticalBreakthrough": 0,
+          "invincible": 1,
+          "victoryMarch": 0,
+          "deathTrack": 0,
+          "EFC2016": 0,
+          "diehard": 3,
+          "WFC2014": 0,
+          "handOfDeath": 3
+        },
+        "account_id": 13456257,
+        "tank_id": 2417
+      }
+    ]
+  }
+}
